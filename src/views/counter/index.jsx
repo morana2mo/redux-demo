@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from "redux";
 import { connect }from "react-redux";
 import  * as CounterActions from '../../actions/counter';
-import "../../assets/less/index.css";
+// import "../../assets/less/index.css";
 //将state.counter绑定到props的counter
 const mapstateToProps = state =>{
 	return {
