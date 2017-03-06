@@ -1,10 +1,14 @@
-var path = require('path')
-var webpack = require('webpack')
+var path = require('path');
+var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var nodeModulesPath = path.resolve(__dirname, 'node_modules');
 module.exports = {
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'eval',
 
   entry: [
-    'webpack-hot-middleware/client?reload=true',
+    'webpack/hot/dev-server',
+    'webpack-dev-server/client?http://localhost:8080',
     './index'
   ],
   output: {
@@ -14,21 +18,26 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new HtmlWebpackPlugin({
+      template: 'public/index.html',
+      inject: 'body',
+      filename: 'index.html'
+    }),
+    new ExtractTextPlugin('style.css'),
   ],
   module: {
     loaders: [{
       test: /\.jsx?$/,
       loaders: 'babel-loader',
-      exclude: /node_modules/,
+      exclude: [nodeModulesPath],
       query: {
         presets: ['es2015', 'react']
       }
     },
     {
       test: /\.css?$/,
-      loaders: 'style-loader!css-loader',
-      exclude: /node_modules/
+      loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' }),
+      exclude: [nodeModulesPath]
     }
     ]
   }

@@ -1,25 +1,49 @@
-var webpack = require('webpack')
-var webpackDevMiddleware = require('webpack-dev-middleware')
-var webpackHotMiddleware = require('webpack-hot-middleware')
-var config = require('./webpack.config')
-var app = new (require('express'))()
 
-var port = 3000
+var path = require('path');
+var express = require('express');
+var httpProxy = require('http-proxy');
+var proxy = httpProxy.createProxyServer();
+var app = express();
 
-var compiler = webpack(config)
+var isProduction = process.env.NODE_ENV === 'production';
+var port = isProduction ? process.env.PORT : 3000;
 
-app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }))
+var publicPath = path.resolve(__dirname, 'public');
 
-app.use(webpackHotMiddleware(compiler))
+app.use(express.static(publicPath));
 
-app.get("/", function(req, res) {
-  res.sendFile(__dirname + '/index.html')
-})
 
-app.listen(port, function(error) {
-  if (error) {
-    console.error(error)
-  } else {
-    console.info("==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.", port, port)
-  }
-})
+app.all('/db/*', function (req, res) {
+  proxy.web(req, res, {
+    target: 'https://glowing-carpet-4534.firebaseio.com'
+  });
+});
+
+if (!isProduction) {
+
+	var bundle = require('./server/bundle.js');
+  	bundle();
+
+  	app.all('/build/*', function (req, res) {
+    proxy.web(req, res, {
+        target: 'http://localhost:8080'
+    });
+  });
+}
+// var compiler = webpack(config)
+
+// app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }))
+
+// app.use(webpackHotMiddleware(compiler))
+
+// app.get("/", function(req, res) {
+//   res.sendFile(__dirname + '/index.html')
+// })
+
+proxy.on('error', function(e) {
+  console.log('Could not connect to proxy, please try again...');
+});
+
+app.listen(port, function () {
+  console.log('Server running on port ' + port);
+});
