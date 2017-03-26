@@ -18,6 +18,14 @@ module.exports = {
       filename: 'index.html'
     }),
     new ExtractTextPlugin('[name]-[hash].min.css'),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+      },
+      output: {
+        comments: false,
+      },
+    }),
   ],
   module: {
     loaders: [{

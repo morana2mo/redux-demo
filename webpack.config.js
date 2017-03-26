@@ -9,7 +9,7 @@ module.exports = {
   entry: [
     'webpack/hot/dev-server',
     'webpack-dev-server/client?http://localhost:8080',
-    './index'
+    './index',
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -27,18 +27,27 @@ module.exports = {
   ],
   module: {
     loaders: [{
-      test: /\.jsx?$/,
-      loaders: 'babel-loader',
-      exclude: [nodeModulesPath],
-      query: {
-        presets: ['es2015', 'react']
-      }
-    },
-    {
-      test: /\.css?$/,
-      loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' }),
-      exclude: [nodeModulesPath]
-    }
-    ]
+        test: /\.jsx?$/,
+        loaders: 'babel-loader',
+        exclude: [nodeModulesPath],
+        query: {
+          presets: ['es2015', 'react']
+        }
+      }, 
+      {
+        test: /\.css?$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader'
+        }),
+        exclude: [nodeModulesPath]
+      }, 
+      {
+        test: /.less$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: "css-loader!less-loader"
+        })
+      }]
+    }  
   }
-}

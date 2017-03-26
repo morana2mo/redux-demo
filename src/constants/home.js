@@ -1,0 +1,1 @@
+export const HOME_TAB = 'HOME_TAB';
