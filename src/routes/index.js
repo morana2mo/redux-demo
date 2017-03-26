@@ -1,10 +1,12 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route} from 'react-router';
 
-import Home from '../views/home/index.jsx';
+
 import Counter from '../views/counter/index.jsx';
-
+import Home from '../views/home/index.jsx';
 export default (
-	 <Route path="/" component={Counter}>
+	 <Route>
+	 	<Route path="/" component={Home}/>
+	 	<Route path="home" component={Counter}/>
 	 </Route>
 )
