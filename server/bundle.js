@@ -2,10 +2,10 @@ var webpack = require('webpack');
 var path = require('path');
 var fs = require('fs');
 var WebpackDevServer = require('webpack-dev-server');
-var config = require('../webpack.config');
+
 module.exports = function() {
 	var bundleStart = null;
-	var compiler = webpack(config);
+	var compiler = webpack( require('../webpack.config'));
 	compiler.plugin('compile', function() {
 		console.log('Bundling...');
 		bundleStart = Date.now();
