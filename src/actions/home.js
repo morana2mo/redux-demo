@@ -1,7 +1,12 @@
-import { HOME_TAB } from '../constants/home';
+import { SHOW_CATEGORY ,LOADING ,LOAD_FAILURE} from '../constants/home';
 
-export const showTabData = () =>{
-	return {
-		type : HOME_TAB 
-	}
+const showCategory = () => {
+  return {
+    types: [LOADING, SHOW_CATEGORY, LOAD_FAILURE],
+    request: {
+      url: '/home'
+    },
+
+  };
 }
+export { showCategory };

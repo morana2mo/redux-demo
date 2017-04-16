@@ -1,18 +1,22 @@
-import { createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
-import invariant from 'redux-immutable-state-invariant'
-import thunk from 'redux-thunk'
-import rootReducer from '../reducers'
+import { createStore, applyMiddleware ,compose } from 'redux';
 
-//applyMiddleware来自redux可以包装store的dispatch
+import DevTools from '../containers/dev-tools.jsx';
 
-//thunk作用是使action创建函数可以返回一个function代替一个action对象
+import logger from '../middleware/logger';
+import api from '../middleware/api';
+import rootReducer from '../reducers';
 
-const configureStore = () =>{
-	let store = createStore(
-		rootReducer,
-		applyMiddleware(thunk)
-	);
+
+let finalCreateStore;
+const configureStoreDev = (initialState = {}) =>{
+	
+	finalCreateStore = compose(
+      applyMiddleware(logger, api),
+	  window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument()
+    )(createStore);
+	
+	const store = finalCreateStore(rootReducer, initialState);
+
 	//热替换选项
 	if(module.hot){
 		module.hot.accept('../reducers',()=>{
@@ -22,4 +26,5 @@ const configureStore = () =>{
 	}
 	return store
 }
-export default configureStore
+
+export default configureStoreDev;

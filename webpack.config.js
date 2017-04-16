@@ -9,7 +9,7 @@ module.exports = {
   entry: [
     'webpack/hot/dev-server',
     'webpack-dev-server/client?http://localhost:8080',
-    './index',
+    './index.jsx',
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -27,11 +27,11 @@ module.exports = {
   ],
   module: {
     loaders: [{
-        test: /\.jsx?$/,
+        test: /.jsx?$/,
         loaders: 'babel-loader',
         exclude: [nodeModulesPath],
         query: {
-          presets: ['es2015', 'react']
+          presets: ['es2015', 'stage-3','react']
         }
       }, 
       {

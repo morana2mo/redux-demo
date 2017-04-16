@@ -1,6 +1,7 @@
 import { INCREMENT_COUNTER, DECREMENT_COUNTER } from '../constants/counter';
 
-const counter = (state = 0,action) =>{
+const defaultState = 0;
+const counter = (state = defaultState,action) =>{
 	switch(action.type){
 		case INCREMENT_COUNTER:
 			return state+1
